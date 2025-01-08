@@ -1,1 +1,11 @@
-# odin-rock-paper-scissors
+# Odin Rock Paper Scissors Game Project
+
+## Project Overview
+- **Project Source**: [Project: Rock Paper Scissors](https://www.theodinproject.com/lessons/foundations-rock-paper-scissors)
+
+## Project Stages
+
+### First Stage
+![Console Game](/assets/console-sample.png)
+
+### Second Stage
