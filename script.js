@@ -45,7 +45,9 @@ function playGame(){
         round:1, 
         playerChoice:undefined, 
         computerChoice:undefined,
-        maxRound : parseInt(document.querySelector('#rounds-slider').value,)
+        maxRound : parseInt(document.querySelector('#rounds-slider').value,),
+        computerEmojis: {rock: '🪨', paper: '📄', scissors: '✂️'},
+        playerEmojis: {rock:'✊', paper: '✋',scissors : '✌️'}
     };
     createGameBoard(game);
     console.log(`Final game ${game}`);
@@ -140,7 +142,8 @@ function displayResults(winner, game)
     else
         messageSelection.textContent=`${winner} won this round!`;
 
-    nextRoundButton.addEventListener('click', ()=> createGameBoard(game));        
+    nextRoundButton.addEventListener('click', ()=> createGameBoard(game));
+    displayRoundSelection(game);   
     displayScore(game);
     pageContent.appendChild(messageSelection);
     pageContent.appendChild(nextRoundButton);   
@@ -160,17 +163,58 @@ function displayScore(game)
     pageContent.appendChild(scoreDisplay);
 }
 
-function displayGameOver(game){
+function displayGameOver(game) {
     const pageContent = document.querySelector('.content');
+    pageContent.innerHTML = ''; // Clear the page content
+    
+    const gameOverContainer = document.createElement('div');
+    gameOverContainer.classList.add('game-over-container');
+    
+    const finalResults = document.createElement('div');
+    const finalResultText = document.createElement('h2');
+    finalResultText.textContent=`It's the end of the game!`;
+    finalResults.classList.add('final-results');
+    finalResults.textContent = `Player: ${game.player}      |     Computer: ${game.computer}`;
+    
     const startNewGameButton = document.createElement('button');
-
-    pageContent.textContent = `Final Results: 
-    Result: Player: ${game.player}, Computer: ${game.computer}`;
-
-    startNewGameButton.textContent='New Game';
-    startNewGameButton.addEventListener('click',()=>{
-        location.reload();
+    startNewGameButton.textContent = 'Start a New Game';
+    startNewGameButton.classList.add('new-game-button');
+    startNewGameButton.addEventListener('click', () => {
+        location.reload(); // Reload the page to restart the game
     });
+    
+    gameOverContainer.appendChild(finalResultText);
+    gameOverContainer.appendChild(finalResults);
+    gameOverContainer.appendChild(startNewGameButton);
+    pageContent.appendChild(gameOverContainer);
+    
+    }
 
-    pageContent.appendChild(startNewGameButton);
+function displayRoundSelection(game){
+    const pageContent=document.querySelector('.content');
+    const playerSelection =document.createElement('div');
+    const computerSelection =document.createElement('div');
+    playerSelection.textContent=`The player chose: ${getCPlayerEmojiSelection(game)}`;
+    computerSelection.textContent=`The computer chose: ${getComputerEmojiSelection(game)}`;
+    
+    pageContent.appendChild(playerSelection);
+    pageContent.appendChild(computerSelection);
+}
+
+function getComputerEmojiSelection(game){
+    if (game.computerChoice=='rock')
+        return game.computerEmojis.rock;
+    else if (game.computerChoice=='paper')
+        return game.computerEmojis.paper;
+    else if(game.computerChoice=='scissors')
+        return game.computerEmojis.scissors;
+}
+
+function getCPlayerEmojiSelection(game){
+    if (game.playerChoice=='rock')
+        return game.playerEmojis.rock;
+    else if (game.playerChoice=='paper')
+        return game.playerEmojis.paper;
+    else if(game.playerChoice=='scissors')
+        return game.playerEmojis.scissors;
 }
