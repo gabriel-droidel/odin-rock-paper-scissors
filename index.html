@@ -10,11 +10,16 @@
 <body>
 
 <header>
-    <h1>Rock Paper Scissors</h1>
+    <h1><a href="index.html">Rock Paper Scissors</a></h1>
 </header>
 <div class="content">
     <p>Press Play to start the game!</p>
     <button id="start-game-button">Play</button>
+    <div>
+        <label for="rounds-slider">Choose number of rounds:</label>
+        <input type="range" name="rounds-slider" id="rounds-slider" min="'1" max="10" value="5">
+        <span id="rounds-display">5</span> rounds
+    </div>
 </div>
 
 </body>

@@ -45,6 +45,7 @@ function playGame(){
         round:1, 
         playerChoice:undefined, 
         computerChoice:undefined,
+        maxRound : parseInt(document.querySelector('#rounds-slider').value,)
     };
     createGameBoard(game);
     console.log(`Final game ${game}`);
@@ -56,6 +57,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const startGameButton = document.querySelector('#start-game-button'); // add button to start playing the game
     startGameButton.addEventListener('click', () =>playGame());
 })
+document.addEventListener('DOMContentLoaded', ()=>{
+    const roundsSlider = document.querySelector("#rounds-slider");
+    const roundsDisplay = document.querySelector("#rounds-display");
+
+    roundsSlider.addEventListener('input', ()=>{
+        const rounds = roundsSlider.value;
+        roundsDisplay.textContent=rounds;
+    });
+});
 
 function createGameBoard(game)
 {
@@ -66,7 +76,7 @@ function createGameBoard(game)
     const choicesBox = document.createElement('div');
     choicesBox.classList.add('choices-box');
 
-    if (game.round > 5) {  // Stop the game after 5 rounds
+    if (game.round > game.maxRound) {  // Stop the game after 5 rounds
       displayGameOver(game);
         return;
     }
@@ -76,12 +86,12 @@ function createGameBoard(game)
     pageContent.appendChild(choicesBox);
 
     const choices = [
-        {name: 'Rock', action: chooseRock}, 
-        {name: 'Paper', action: choosePaper}, 
-        {name: 'Scissors', action: chooseScissors}];
+        {name: 'Rock', action: chooseRock, display:'✊'}, 
+        {name: 'Paper', action: choosePaper, display:'✋'}, 
+        {name: 'Scissors', action: chooseScissors,display:'✌️'}];
     choices.forEach(choice =>{
         const button = document.createElement('button');
-        button.textContent=choice.name; // get selection name from object inside the array
+        button.textContent=choice.display; // get selection name from object inside the array
         button.classList.add('choice-button');
         button.addEventListener('click', ()=> choice.action(game)); // get custom function for each selection
         choicesBox.appendChild(button);
@@ -158,7 +168,9 @@ function displayGameOver(game){
     Result: Player: ${game.player}, Computer: ${game.computer}`;
 
     startNewGameButton.textContent='New Game';
-    startNewGameButton.addEventListener('click',playGame);
-    
+    startNewGameButton.addEventListener('click',()=>{
+        location.reload();
+    });
+
     pageContent.appendChild(startNewGameButton);
 }
