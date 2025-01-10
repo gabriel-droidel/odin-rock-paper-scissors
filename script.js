@@ -27,40 +27,39 @@ function playRound(playerOne, playerTwo)
         return 'The Computer';
 }
 
-function playGame()
+function keepScore(winner,score)
 {
-    let playerOneScore=0, playerTwoScore=0;
-    for(let i=1;i<=5 ;i++)
-    {
-        let playerOneChoice=getComputerChoice();
-        let playerTwoChoice=getPlayerChoice();
-        let roundResult='';
-        roundResult=playRound(playerOneChoice,playerTwoChoice);
-
-        if(roundResult===playerOneChoice)
-            playerOneScore++;
-        else if(roundResult===playerTwoChoice) 
-            playerTwoScore++;
-
-        console.log(`Round: ${i}`);
-        console.log(`Computer: ${playerOneScore}`);
-        console.log(`Player: ${playerTwoScore}`);
-    }
-    displayResults(playerOneScore,playerTwoScore);
+        if(winner=='The Player')
+            score.player++;
+        else if(winner=='The Computer') 
+            score.computer++;
+        console.log(score);
+        return score;
+        
 }
 
+function playGame(){
+    const score = {player:0, computer:0, round:1,};
+    createGameBoard(score);
+    console.log(`Final Score ${score}`);
+}
 
 //DOM Manipulation
 
 document.addEventListener('DOMContentLoaded', ()=>{
     const startGameButton = document.querySelector('#start-game-button'); // add button to start playing the game
-    startGameButton.addEventListener('click', () =>createGameBoard());
+    startGameButton.addEventListener('click', () =>playGame());
 })
 
-function createGameBoard(){
+function createGameBoard(score){
 
     const pageContent = document.querySelector('.content');
     pageContent.textContent=''; // clear the page
+
+    if (score.round > 5) {  // If more than 5 rounds, stop the game
+        pageContent.textContent = `Game Over! Final Score: Player - ${score.player}, Computer - ${score.computer}`;
+        return;
+    }
 
     const messageSelection = document.createElement('div');
     messageSelection.textContent='Choose your pick!';
@@ -79,32 +78,36 @@ function createGameBoard(){
         const button = document.createElement('button');
         button.textContent=choice.name; // get selection name from object inside the array
         button.classList.add('choice-button');
-        button.addEventListener('click', choice.action); // get custom function for each selection
+        button.addEventListener('click', ()=> choice.action(score)); // get custom function for each selection
         choicesBox.appendChild(button);
     })
 
-    function chooseRock(){
-        const computerChoice=getComputerChoice();
-        const playerChoice = 'rock'
-        const winner = playRound(playerChoice,computerChoice);
-        displayResults(winner);
-    }
-    function choosePaper(){
-        const computerChoice=getComputerChoice();
-        const playerChoice = 'paper'
-        const winner = playRound(playerChoice,computerChoice);
-        displayResults(winner);
-    }
-    function chooseScissors(){
-        const computerChoice=getComputerChoice();
-        const playerChoice = 'scissors'
-        const winner = playRound(playerChoice,computerChoice);
-        displayResults(winner);
-    }
-
 }
-
-function displayResults(winner)
+function chooseRock(score){
+    const computerChoice=getComputerChoice();
+    const playerChoice = 'rock'
+    const winner = playRound(playerChoice,computerChoice);
+    keepScore(winner,score);
+    displayResults(winner, score);
+    score.round++;
+}
+function choosePaper(score){
+    const computerChoice=getComputerChoice();
+    const playerChoice = 'paper'
+    const winner = playRound(playerChoice,computerChoice);
+    keepScore(winner,score);
+    displayResults(winner, score);
+    score.round++;
+}
+function chooseScissors(score){
+    const computerChoice=getComputerChoice();
+    const playerChoice = 'scissors'
+    const winner = playRound(playerChoice,computerChoice);
+    keepScore(winner,score);
+    displayResults(winner, score);
+    score.round++;
+}
+function displayResults(winner, score)
 {
     const pageContent = document.querySelector('.content');
     pageContent.textContent='';
@@ -119,7 +122,7 @@ function displayResults(winner)
         messageSelection.textContent=`${winner} won this round!`;
 
 
-    nextRoundButton.addEventListener('click',createGameBoard);        
+    nextRoundButton.addEventListener('click', ()=> createGameBoard(score));        
     pageContent.appendChild(messageSelection);
     pageContent.appendChild(nextRoundButton);
 }
