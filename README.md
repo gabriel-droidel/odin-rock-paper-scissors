@@ -9,3 +9,5 @@
 ![Console Game](/assets/console-sample.png)
 
 ### Second Stage
+![Main Page](/assets/main_page.png)
+![Game Page](/assets/game.png)
