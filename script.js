@@ -27,21 +27,27 @@ function playRound(playerOne, playerTwo)
         return 'The Computer';
 }
 
-function keepScore(winner,score)
+function keepScore(winner,game)
 {
         if(winner=='The Player')
-            score.player++;
+            game.player++;
         else if(winner=='The Computer') 
-            score.computer++;
-        console.log(score);
-        return score;
+            game.computer++;
+        console.log(game);
+        return game;
         
 }
 
 function playGame(){
-    const score = {player:0, computer:0, round:1,};
-    createGameBoard(score);
-    console.log(`Final Score ${score}`);
+    const game = {
+        player:0, 
+        computer:0, 
+        round:1, 
+        playerChoice:undefined, 
+        computerChoice:undefined,
+    };
+    createGameBoard(game);
+    console.log(`Final game ${game}`);
 }
 
 //DOM Manipulation
@@ -51,13 +57,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
     startGameButton.addEventListener('click', () =>playGame());
 })
 
-function createGameBoard(score){
+function createGameBoard(game){
 
     const pageContent = document.querySelector('.content');
     pageContent.textContent=''; // clear the page
 
-    if (score.round > 5) {  // If more than 5 rounds, stop the game
-        pageContent.textContent = `Game Over! Final Score: Player - ${score.player}, Computer - ${score.computer}`;
+    if (game.round > 5) {  // If more than 5 rounds, stop the game
+        pageContent.textContent = `Game Over! Final game: Player - ${game.player}, Computer - ${game.computer}`;
         return;
     }
 
@@ -78,39 +84,41 @@ function createGameBoard(score){
         const button = document.createElement('button');
         button.textContent=choice.name; // get selection name from object inside the array
         button.classList.add('choice-button');
-        button.addEventListener('click', ()=> choice.action(score)); // get custom function for each selection
+        button.addEventListener('click', ()=> choice.action(game)); // get custom function for each selection
         choicesBox.appendChild(button);
     })
 
 }
-function chooseRock(score){
-    const computerChoice=getComputerChoice();
-    const playerChoice = 'rock'
-    const winner = playRound(playerChoice,computerChoice);
-    keepScore(winner,score);
-    displayResults(winner, score);
-    score.round++;
+function chooseRock(game){
+    game.computerChoice=getComputerChoice();
+    game.playerChoice = 'rock'
+    const winner = playRound(game.playerChoice,game.computerChoice);
+    keepScore(winner,game);
+    displayScore(game);
+    displayResults(winner, game);
+    game.round++;
 }
-function choosePaper(score){
-    const computerChoice=getComputerChoice();
-    const playerChoice = 'paper'
-    const winner = playRound(playerChoice,computerChoice);
-    keepScore(winner,score);
-    displayResults(winner, score);
-    score.round++;
+function choosePaper(game){
+    game.computerChoice=getComputerChoice();
+    game.playerChoice = 'paper'
+    const winner = playRound(game.playerChoice,game.computerChoice);
+    keepScore(winner,game);
+    displayScore(game);
+    displayResults(winner, game);
+    game.round++;
 }
-function chooseScissors(score){
-    const computerChoice=getComputerChoice();
-    const playerChoice = 'scissors'
-    const winner = playRound(playerChoice,computerChoice);
-    keepScore(winner,score);
-    displayResults(winner, score);
-    score.round++;
+function chooseScissors(game){
+    game.computerChoice=getComputerChoice();
+    game.playerChoice = 'scissors'
+    const winner = playRound(game.playerChoice,game.computerChoice);
+    keepScore(winner,game);
+    displayScore(game);
+    displayResults(winner, game);
+    game.round++;
 }
-function displayResults(winner, score)
+function displayResults(winner, game)
 {
     const pageContent = document.querySelector('.content');
-    pageContent.textContent='';
     const nextRoundButton = document.createElement('button');
     nextRoundButton.textContent='Next Round';
 
@@ -122,7 +130,21 @@ function displayResults(winner, score)
         messageSelection.textContent=`${winner} won this round!`;
 
 
-    nextRoundButton.addEventListener('click', ()=> createGameBoard(score));        
+    nextRoundButton.addEventListener('click', ()=> createGameBoard(game));        
     pageContent.appendChild(messageSelection);
     pageContent.appendChild(nextRoundButton);
+}
+
+function displayScore(game){
+    const pageContent = document.querySelector('.content');
+    pageContent.textContent='';
+    const scoreDisplay = document.createElement('div');
+    const roundDisplay = document.createElement('h2');
+
+    roundDisplay.textContent=`Round ${game.round}`;
+    scoreDisplay.textContent=`Score:
+    Player : ${game.player}
+    Computer: ${game.computer}`;
+    pageContent.appendChild(roundDisplay);
+    pageContent.appendChild(scoreDisplay);
 }
