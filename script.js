@@ -57,29 +57,28 @@ document.addEventListener('DOMContentLoaded', ()=>{
     startGameButton.addEventListener('click', () =>playGame());
 })
 
-function createGameBoard(game){
-
+function createGameBoard(game)
+{
     const pageContent = document.querySelector('.content');
     pageContent.textContent=''; // clear the page
+    const messageSelection = document.createElement('div');
+    messageSelection.textContent='Choose your pick!';
+    const choicesBox = document.createElement('div');
+    choicesBox.classList.add('choices-box');
 
-    if (game.round > 5) {  // If more than 5 rounds, stop the game
-        pageContent.textContent = `Game Over! Final game: Player - ${game.player}, Computer - ${game.computer}`;
+    if (game.round > 5) {  // Stop the game after 5 rounds
+      displayGameOver(game);
         return;
     }
 
-    const messageSelection = document.createElement('div');
-    messageSelection.textContent='Choose your pick!';
+    displayScore(game);
     pageContent.appendChild(messageSelection);
-
-    const choicesBox = document.createElement('div');
-    choicesBox.classList.add('choices-box');
     pageContent.appendChild(choicesBox);
 
     const choices = [
         {name: 'Rock', action: chooseRock}, 
         {name: 'Paper', action: choosePaper}, 
         {name: 'Scissors', action: chooseScissors}];
-
     choices.forEach(choice =>{
         const button = document.createElement('button');
         button.textContent=choice.name; // get selection name from object inside the array
@@ -89,55 +88,57 @@ function createGameBoard(game){
     })
 
 }
-function chooseRock(game){
+function chooseRock(game)
+{
     game.computerChoice=getComputerChoice();
     game.playerChoice = 'rock'
     const winner = playRound(game.playerChoice,game.computerChoice);
     keepScore(winner,game);
-    displayScore(game);
     displayResults(winner, game);
     game.round++;
 }
-function choosePaper(game){
+function choosePaper(game)
+{
     game.computerChoice=getComputerChoice();
     game.playerChoice = 'paper'
     const winner = playRound(game.playerChoice,game.computerChoice);
     keepScore(winner,game);
-    displayScore(game);
     displayResults(winner, game);
     game.round++;
 }
-function chooseScissors(game){
+function chooseScissors(game)
+{
     game.computerChoice=getComputerChoice();
     game.playerChoice = 'scissors'
     const winner = playRound(game.playerChoice,game.computerChoice);
     keepScore(winner,game);
-    displayScore(game);
     displayResults(winner, game);
     game.round++;
 }
+
 function displayResults(winner, game)
 {
     const pageContent = document.querySelector('.content');
+    pageContent.textContent='';
     const nextRoundButton = document.createElement('button');
     nextRoundButton.textContent='Next Round';
 
     const messageSelection = document.createElement('div');
 
     if(winner==='Draw')
-        messageSelection.textContent=`It's a draw!`;
+        messageSelection.textContent=`No winner! It's a draw!`;
     else
         messageSelection.textContent=`${winner} won this round!`;
 
-
     nextRoundButton.addEventListener('click', ()=> createGameBoard(game));        
+    displayScore(game);
     pageContent.appendChild(messageSelection);
-    pageContent.appendChild(nextRoundButton);
+    pageContent.appendChild(nextRoundButton);   
 }
 
-function displayScore(game){
+function displayScore(game)
+{
     const pageContent = document.querySelector('.content');
-    pageContent.textContent='';
     const scoreDisplay = document.createElement('div');
     const roundDisplay = document.createElement('h2');
 
@@ -147,4 +148,17 @@ function displayScore(game){
     Computer: ${game.computer}`;
     pageContent.appendChild(roundDisplay);
     pageContent.appendChild(scoreDisplay);
+}
+
+function displayGameOver(game){
+    const pageContent = document.querySelector('.content');
+    const startNewGameButton = document.createElement('button');
+
+    pageContent.textContent = `Final Results: 
+    Result: Player: ${game.player}, Computer: ${game.computer}`;
+
+    startNewGameButton.textContent='New Game';
+    startNewGameButton.addEventListener('click',playGame);
+    
+    pageContent.appendChild(startNewGameButton);
 }

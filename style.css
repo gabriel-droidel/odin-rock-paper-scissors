@@ -63,17 +63,19 @@ header{
     display: flex;
     gap:1rem;
 }
-
-.choice-button{
-    border: none;
+button{
+    padding:0.5rem 1rem;
     border-radius: 5px;
+    border: none;
+    font-weight: bold;
+}
+button:hover{
+    transform: scale(1.1);
+}
+.choice-button{
     padding:1rem 2rem;
     background-color: blueviolet;
     color:white;
     font-size: 28px;
-    font-weight: bold;
 }
 
-.choice-button:hover{
-    border:5px solid red;
-}
