@@ -62,6 +62,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 document.addEventListener('DOMContentLoaded', ()=>{
     const roundsSlider = document.querySelector("#rounds-slider");
     const roundsDisplay = document.querySelector("#rounds-display");
+    document.querySelector('#rounds-slider').min = 1;
+    document.querySelector('#rounds-slider').max = 10;
 
     roundsSlider.addEventListener('input', ()=>{
         const rounds = roundsSlider.value;
