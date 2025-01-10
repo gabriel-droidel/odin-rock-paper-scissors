@@ -1,5 +1,6 @@
 
-function getComputerChoice(){
+function getComputerChoice()
+{
     const randomNumber = Math.floor(Math.random() * 3) + 1; // Get random number from interval 1-3
 
     switch (randomNumber){
@@ -12,35 +13,25 @@ function getComputerChoice(){
     }
 }
 
-function getPlayerChoice(){
-    const userChoice = prompt('Choose Rock, Paper, Scissors').toLowerCase();
-
-    switch (userChoice){
-        case 'rock':
-            return 'rock';
-        case 'paper':
-            return 'paper';
-        case 'scissors':
-            return 'scissors';
-    }
-}
-
-function playRound(playerOne, playerTwo){
-    
+function playRound(playerOne, playerTwo)
+{
+    // Handle winning cases
     if (((playerOne==='rock')&&(playerTwo==='scissors'))
     ||((playerOne==='scissors')&&(playerTwo==='paper'))
     ||((playerOne==='paper')&&(playerTwo==='rock')))
     {
-        return playerOne;
-    } else if (playerOne===playerTwo)
-        console.log(`Draw!`);
+        return 'The Player';
+    } else if (playerOne===playerTwo) // Handle draw case
+        return 'Draw';
     else
-        return playerTwo;
+        return 'The Computer';
 }
 
-function playGame(){
+function playGame()
+{
     let playerOneScore=0, playerTwoScore=0;
-    for(let i=1;i<=5;i++){
+    for(let i=1;i<=5 ;i++)
+    {
         let playerOneChoice=getComputerChoice();
         let playerTwoChoice=getPlayerChoice();
         let roundResult='';
@@ -58,11 +49,77 @@ function playGame(){
     displayResults(playerOneScore,playerTwoScore);
 }
 
-function displayResults(playerOneScore, playerTwoScore){
-    if(playerOneScore>playerTwoScore)
-        console.log(`The Computer Wins!`);
-    else if(playerTwoScore>playerOneScore)
-        console.log(`The Player Wins!`);
-    else if(playerOneScore===playerTwoScore)
-        console.log(`It is a draw!`);
+
+//DOM Manipulation
+
+document.addEventListener('DOMContentLoaded', ()=>{
+    const startGameButton = document.querySelector('#start-game-button'); // add button to start playing the game
+    startGameButton.addEventListener('click', () =>createGameBoard());
+})
+
+function createGameBoard(){
+
+    const pageContent = document.querySelector('.content');
+    pageContent.textContent=''; // clear the page
+
+    const messageSelection = document.createElement('div');
+    messageSelection.textContent='Choose your pick!';
+    pageContent.appendChild(messageSelection);
+
+    const choicesBox = document.createElement('div');
+    choicesBox.classList.add('choices-box');
+    pageContent.appendChild(choicesBox);
+
+    const choices = [
+        {name: 'Rock', action: chooseRock}, 
+        {name: 'Paper', action: choosePaper}, 
+        {name: 'Scissors', action: chooseScissors}];
+
+    choices.forEach(choice =>{
+        const button = document.createElement('button');
+        button.textContent=choice.name; // get selection name from object inside the array
+        button.classList.add('choice-button');
+        button.addEventListener('click', choice.action); // get custom function for each selection
+        choicesBox.appendChild(button);
+    })
+
+    function chooseRock(){
+        const computerChoice=getComputerChoice();
+        const playerChoice = 'rock'
+        const winner = playRound(playerChoice,computerChoice);
+        displayResults(winner);
+    }
+    function choosePaper(){
+        const computerChoice=getComputerChoice();
+        const playerChoice = 'paper'
+        const winner = playRound(playerChoice,computerChoice);
+        displayResults(winner);
+    }
+    function chooseScissors(){
+        const computerChoice=getComputerChoice();
+        const playerChoice = 'scissors'
+        const winner = playRound(playerChoice,computerChoice);
+        displayResults(winner);
+    }
+
+}
+
+function displayResults(winner)
+{
+    const pageContent = document.querySelector('.content');
+    pageContent.textContent='';
+    const nextRoundButton = document.createElement('button');
+    nextRoundButton.textContent='Next Round';
+
+    const messageSelection = document.createElement('div');
+
+    if(winner==='Draw')
+        messageSelection.textContent=`It's a draw!`;
+    else
+        messageSelection.textContent=`${winner} won this round!`;
+
+
+    nextRoundButton.addEventListener('click',createGameBoard);        
+    pageContent.appendChild(messageSelection);
+    pageContent.appendChild(nextRoundButton);
 }
