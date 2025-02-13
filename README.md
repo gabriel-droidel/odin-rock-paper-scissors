@@ -1,13 +1,13 @@
-# Odin Rock Paper Scissors Game Project
+# Rock Paper Scissors
 
-## Project Overview
-- **Project Source**: [Project: Rock Paper Scissors](https://www.theodinproject.com/lessons/foundations-rock-paper-scissors)
+This is a simple implementation of the **Rock Paper Scissors** game built with **HTML**, **CSS**, and **JavaScript**. It was developed as part of The Odin Project's Foundations course.
 
-## Project Stages
+## Demo
 
-### First Stage
-![Console Game](/assets/console-sample.png)
+You can play the game here: [Live Demo](https://gabriel-droidel.github.io/odin-rock-paper-scissors/)
 
-### Second Stage
-![Main Page](/assets/main_page.png)
-![Game Page](/assets/game.png)
+## Technologies Used
+
+- **HTML**: Used for structuring the game interface.
+- **CSS**: Used for styling the page and adding a simple, clean design.
+- **JavaScript**: Handles the game logic, including player and computer choices, and determining the winner.
